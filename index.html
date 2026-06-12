@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABSENSI PENGAJIAN</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(135deg, #0f9b0f, #2c5364);
+    }
+
+    .container{
+      width:400px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      padding:35px;
+      border-radius:25px;
+      box-shadow:0 8px 25px rgba(0,0,0,0.25);
+      color:white;
+    }
+
+    .logo{
+      text-align:center;
+      font-size:55px;
+      margin-bottom:10px;
+    }
+
+    h2{
+      text-align:center;
+      margin-bottom:5px;
+      font-size:28px;
+    }
+
+    .sub{
+      text-align:center;
+      font-size:14px;
+      opacity:0.9;
+      margin-bottom:25px;
+    }
+
+    input, select{
+      width:100%;
+      padding:14px;
+      margin-top:12px;
+      border:none;
+      border-radius:12px;
+      outline:none;
+      font-size:15px;
+      background:rgba(255,255,255,0.9);
+    }
+
+    button{
+      width:100%;
+      padding:14px;
+      margin-top:20px;
+      border:none;
+      border-radius:12px;
+      background:#ffffff;
+      color:#0f9b0f;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    button:hover{
+      transform:scale(1.03);
+      background:#e8ffe8;
+    }
+
+    #hasil{
+      margin-top:20px;
+      background:rgba(255,255,255,0.2);
+      padding:15px;
+      border-radius:12px;
+      line-height:1.8;
+      display:none;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="logo">🕌</div>
+
+  <h2>ABSENSI PENGAJIAN</h2>
+
+  <div class="sub">
+    Desa Binjai Barat <br>
+    Minggu, 14 Juni 2026
+  </div>
+
+  <input type="text" id="NAMA" placeholder="Masukkan nama lengkap">
+
+  <select id="DAPUKAN">
+    <option value="">Pilih Dapukan</option>
+    <option>KI DESA</option>
+    <option>WAKIL KI DESA</option>
+    <option>KU DESA</option>
+    <option>PENULIS KU DESA</option>
+    <option>MUBALIGH DESA</option>
+    <option>PENEROBOS DESA</option>
+    <option>AGHNIA DESA</option>
+    <option>KI KELOMPOK</option>
+    <option>WAKIL KI KELOMPOK</option>
+    <option>KU KELOMPOK</option>
+    <option>PENULIS KU KELOMPOK</option>
+    <option>MUBALIGH KELOMPOK</option>
+    <option>PENEROBOS KELOMPOK</option>
+    <option>AGHNIA KELOMPOK</option>
+    <option>JAMAAH KELOMPOK</option>
+  </select>
+
+  <select id="KELOMPOK">
+    <option value="">Pilih Kelompok</option>
+    <option>TANAH MERAH</option>
+    <option>TANJUNG JATI</option>
+    <option>PASAR 7</option>
+    <option>PURWODADI</option>
+    <option>CINTA DAPAT</option>
+    <option>SELESAI</option>
+    <option>MARIKE</option>
+  </select>
+
+  <button onclick="simpanAbsen()">
+    Simpan Absen
+  </button>
+
+  <div id="hasil"></div>
+
+</div>
+
+<script>
+
+async function simpanAbsen(){
+
+  // ===== BATAS TANGGAL DAN WAKTU =====
+  const sekarang = new Date();
+
+  // Ambil waktu Indonesia Barat (WIB)
+  const waktuWIB = new Date(
+    sekarang.toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
+  );
+
+  const tahun = waktuWIB.getFullYear();
+  const bulan = waktuWIB.getMonth() + 1; // Januari = 0
+  const tanggal = waktuWIB.getDate();
+  const jam = waktuWIB.getHours();
+  const menit = waktuWIB.getMinutes();
+  const detik = waktuWIB.getSeconds();
+
+  // Hanya tanggal 14 Juni 2026
+  if (tahun !== 2026 || bulan !== 6 || tanggal !== 14) {
+    Swal.fire({
+      icon: "warning",
+      title: "Absensi Ditutup",
+      text: "Absensi hanya dapat dilakukan pada tanggal 14 Juni 2026.",
+      confirmButtonColor: "#d33"
+    });
+    return;
+  }
+
+  // Hanya pukul 09:00:00 s/d 10:59:59 WIB
+  const totalDetik = (jam * 3600) + (menit * 60) + detik;
+  const mulai = (9 * 3600);      // 09:00:00
+  const selesai = (11 * 3600);   // 11:00:00
+
+  if (totalDetik < mulai || totalDetik >= selesai) {
+    Swal.fire({
+      icon: "warning",
+      title: "Akses Ditutup",
+      text: "Absensi hanya dapat diisi pukul 09.00 sampai 11.00 WIB.",
+      confirmButtonColor: "#d33"
+    });
+    return;
+  }
+
+  // ===== KODE ABSENSI LAMA =====
+
+  let nama = document.getElementById("NAMA").value;
+  let dapukan = document.getElementById("DAPUKAN").value;
+  let kelompok = document.getElementById("KELOMPOK").value;
+
+  if(nama === "" || dapukan === "" || kelompok === ""){
+    Swal.fire({
+      icon: "warning",
+      title: "Data Belum Lengkap",
+      text: "Semua data harus diisi!",
+      confirmButtonColor: "#d33"
+    });
+    return;
+  }
+
+  let data = {
+    nama: nama,
+    dapukan: dapukan,
+    kelompok: kelompok
+  };
+
+  try {
+
+    await fetch(
+      "https://script.google.com/macros/s/AKfycbwMO0r2kM-htMs3FvoztJk0-a342ZTqKvx_AQVfaJm21cYO0V5FfSkB__MKvSy2N91G8g/exec",
+      {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }
+    );
+
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil!",
+      text: "Absensi berhasil disimpan.",
+      confirmButtonColor: "#16a34a"
+    });
+
+    document.getElementById("NAMA").value = "";
+    document.getElementById("DAPUKAN").value = "";
+    document.getElementById("KELOMPOK").value = "";
+
+  } catch(error) {
+
+    Swal.fire({
+      icon: "error",
+      title: "Terjadi Kesalahan",
+      text: "Gagal menyimpan absensi.",
+      confirmButtonColor: "#d33"
+    });
+
+    console.log(error);
+  }
+}
+</script>
+
+</body>
+</html>
