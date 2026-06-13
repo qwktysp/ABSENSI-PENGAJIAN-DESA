@@ -165,7 +165,7 @@ async function simpanAbsen(){
   const menit = waktuWIB.getMinutes();
   const detik = waktuWIB.getSeconds();
 
-  // Hanya tanggal 14 Juni 2026
+  
   if (false) {
     Swal.fire({
       icon: "warning",
@@ -176,7 +176,7 @@ async function simpanAbsen(){
     return;
   }
 
-  // Hanya pukul 09:00:00 s/d 10:59:59 WIB
+  
   const totalDetik = (jam * 3600) + (menit * 60) + detik;
   const mulai = (9 * 3600);      // 09:00:00
   const selesai = (11 * 3600);   // 11:00:00
@@ -216,7 +216,7 @@ async function simpanAbsen(){
   try {
 
     await fetch(
-      "https://script.google.com/macros/s/AKfycbxgOFXJOvvP9MD19o3mrwxSe6q2xljnEDHVNspSg1rmMUYP-Dk8OSstlq1ate-uzqKAVQ/exec",
+      "https://script.google.com/macros/s/AKfycbzwqAy3ysK93cBllBa9qid_2mBIp1HX7TNMej-SK1I07gHps3O7rtamCurlem-CoMjJ/exec",
       {
         method: "POST",
         mode: "no-cors",
