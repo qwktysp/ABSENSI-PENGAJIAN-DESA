@@ -215,18 +215,19 @@ async function simpanAbsen(){
 
   try {
 
-    await fetch(
-      "https://script.google.com/macros/s/AKfycbzwqAy3ysK93cBllBa9qid_2mBIp1HX7TNMej-SK1I07gHps3O7rtamCurlem-CoMjJ/exec",
-      {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      }
-    );
+  const response = await fetch(
+  "https://script.google.com/macros/s/AKfycbzwqAy3ysK93cBllBa9qid_2mBIp1HX7TNMej-SK1I07gHps3O7rtamCurlem-CoMjJ/exec",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify(data)
+  }
+);
 
+const result = await response.text();
+alert(result);
     Swal.fire({
       icon: "success",
       title: "Berhasil!",
