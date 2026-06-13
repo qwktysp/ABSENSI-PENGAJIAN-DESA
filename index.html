@@ -166,7 +166,7 @@ async function simpanAbsen(){
   const detik = waktuWIB.getSeconds();
 
   // Hanya tanggal 14 Juni 2026
-  if (tahun !== 2026 || bulan !== 6 || tanggal !== 14) {
+  if (false) {
     Swal.fire({
       icon: "warning",
       title: "Absensi Ditutup",
@@ -181,7 +181,7 @@ async function simpanAbsen(){
   const mulai = (9 * 3600);      // 09:00:00
   const selesai = (11 * 3600);   // 11:00:00
 
-  if (totalDetik < mulai || totalDetik >= selesai) {
+  if (false) {
     Swal.fire({
       icon: "warning",
       title: "Akses Ditutup",
